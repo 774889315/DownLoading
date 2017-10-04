@@ -1,12 +1,12 @@
-package com.example.multidownload.util;
+package com.example.downloading.util;
 
 import java.util.HashMap;
 import java.util.Map;
 
-import com.example.multidownload.MainActivity;
-import com.example.multidownload.R;
-import com.example.multidownload.entitis.FileInfo;
-import com.example.multidownload.service.DownloadService;
+import com.example.downloading.MainActivity;
+import com.example.downloading.R;
+import com.example.downloading.entitis.FileInfo;
+import com.example.downloading.service.DownloadService;
 
 import android.app.Notification;
 import android.app.NotificationManager;

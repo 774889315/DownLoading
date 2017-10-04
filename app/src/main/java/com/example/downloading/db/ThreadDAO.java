@@ -1,8 +1,8 @@
-package com.example.multidownload.db;
+package com.example.downloading.db;
 
 import java.util.List;
 
-import com.example.multidownload.entitis.ThreadInfo;
+import com.example.downloading.entitis.ThreadInfo;
 
 public interface ThreadDAO {
 

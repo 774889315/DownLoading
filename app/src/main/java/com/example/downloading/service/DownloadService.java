@@ -1,4 +1,4 @@
-package com.example.multidownload.service;
+package com.example.downloading.service;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,7 +8,7 @@ import java.net.URL;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import com.example.multidownload.entitis.FileInfo;
+import com.example.downloading.entitis.FileInfo;
 
 import android.app.Service;
 import android.content.Intent;

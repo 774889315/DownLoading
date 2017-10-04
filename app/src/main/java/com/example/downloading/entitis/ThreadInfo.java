@@ -1,4 +1,4 @@
-package com.example.multidownload.entitis;
+package com.example.downloading.entitis;
 
 
 public class ThreadInfo {

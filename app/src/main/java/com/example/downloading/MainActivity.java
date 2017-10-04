@@ -1,12 +1,12 @@
-package com.example.multidownload;
+package com.example.downloading;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.multidownload.adapter.FileAdapter;
-import com.example.multidownload.entitis.FileInfo;
-import com.example.multidownload.service.DownloadService;
-import com.example.multidownload.util.NotificationUtil;
+import com.example.downloading.adapter.FileAdapter;
+import com.example.downloading.entitis.FileInfo;
+import com.example.downloading.service.DownloadService;
+import com.example.downloading.util.NotificationUtil;
 
 import android.app.Activity;
 import android.content.BroadcastReceiver;
@@ -14,17 +14,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 public class MainActivity extends Activity{
-	private ListView listView;
+	private RecyclerView recyclerView;
 	private List<FileInfo> mFileList;
 	private FileAdapter mAdapter;
 	private NotificationUtil mNotificationUtil = null;
 	private String urlone = "http://www.imooc.com/mobile/imooc.apk";
 	
-	
+
 	private UIRecive mRecive;
 
 	@Override
@@ -32,18 +34,22 @@ public class MainActivity extends Activity{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		listView = (ListView) findViewById(R.id.list_view);
-		mFileList = new ArrayList<FileInfo>();
+		mFileList = new ArrayList<>();
+		recyclerView = (RecyclerView) findViewById(R.id.recyclerv_view);
+		LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+		recyclerView.setLayoutManager(layoutManager);
+		mAdapter = new FileAdapter(mFileList);
+		recyclerView.setAdapter(mAdapter);
+
 
 
 		FileInfo fileInfo1 = new FileInfo(0, urlone, getfileName(urlone), 0, 0);
 
-		
 		mFileList.add(fileInfo1);
 		
-		mAdapter = new FileAdapter(this, mFileList);
+
 		
-		listView.setAdapter(mAdapter);
+
 		mNotificationUtil = new NotificationUtil(MainActivity.this);
 
 		
@@ -54,6 +60,8 @@ public class MainActivity extends Activity{
 		intentFilter.addAction(DownloadService.ACTION_FINISHED);
 		intentFilter.addAction(DownloadService.ACTION_START);
 		registerReceiver(mRecive, intentFilter);
+
+
 	}
 
 

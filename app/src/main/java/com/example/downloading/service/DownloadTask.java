@@ -1,4 +1,4 @@
-package com.example.multidownload.service;
+package com.example.downloading.service;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-import com.example.multidownload.db.ThreadDAO;
-import com.example.multidownload.db.ThreadDAOImple;
-import com.example.multidownload.entitis.FileInfo;
-import com.example.multidownload.entitis.ThreadInfo;
+import com.example.downloading.db.ThreadDAO;
+import com.example.downloading.db.ThreadDAOImple;
+import com.example.downloading.entitis.FileInfo;
+import com.example.downloading.entitis.ThreadInfo;
 
 import android.content.Context;
 import android.content.Intent;
