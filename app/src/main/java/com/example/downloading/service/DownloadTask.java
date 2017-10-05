@@ -58,11 +58,8 @@ public class DownloadTask {
 		mThreadlist = new ArrayList<DownloadThread>();
 		for (ThreadInfo info : list) {
 			DownloadThread thread = new DownloadThread(info);
-//			thread.start();
-
 			DownloadTask.sExecutorService.execute(thread);
 			mThreadlist.add(thread);
-
 			mDao.insertThread(info);
 		}
 	}
@@ -75,6 +72,7 @@ public class DownloadTask {
 				break;
 			}
 		}
+
 		if (allFinished == true) {
 
 			mDao.deleteThread(mFileInfo.getUrl());
@@ -87,7 +85,7 @@ public class DownloadTask {
 	}
 
 	class DownloadThread extends Thread {
-		private ThreadInfo threadInfo = null;
+		private ThreadInfo threadInfo ;
 
 		public boolean isFinished = false;
 
@@ -106,7 +104,7 @@ public class DownloadTask {
 				conn = (HttpURLConnection) url.openConnection();
 				conn.setConnectTimeout(5 * 1000);
 				conn.setRequestMethod("GET");
-
+//?
 				int start = threadInfo.getStart() + threadInfo.getFinished();
 
 				conn.setRequestProperty("Range", "bytes=" + start + "-" + threadInfo.getEnd());
@@ -118,7 +116,7 @@ public class DownloadTask {
 				intent.setAction(DownloadService.ACTION_UPDATE);
 				int code = conn.getResponseCode();
 				if (code == HttpURLConnection.HTTP_PARTIAL) {
-					is = conn.getInputStream();
+					is = conn.getInputStream() ;
 					byte[] bt = new byte[1024];
 					int len = -1;
 

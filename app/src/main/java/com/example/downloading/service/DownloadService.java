@@ -54,7 +54,6 @@ public class DownloadService extends Service {
 			FileInfo fileInfo = (FileInfo) intent.getSerializableExtra("fileInfo");
 			DownloadTask task = mTasks.get(fileInfo.getId());
 			if (task != null) {
-
 				task.mIsPause = true;
 			}
 		}

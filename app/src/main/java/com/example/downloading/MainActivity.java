@@ -8,12 +8,15 @@ import com.example.downloading.entitis.FileInfo;
 import com.example.downloading.service.DownloadService;
 import com.example.downloading.util.NotificationUtil;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.ListView;
@@ -24,13 +27,19 @@ public class MainActivity extends Activity{
 	private List<FileInfo> mFileList;
 	private FileAdapter mAdapter;
 	private NotificationUtil mNotificationUtil = null;
-	private String urlone = "http://www.imooc.com/mobile/imooc.apk";
+	private String urlone = "http://s1.music.126.net/download/android/CloudMusic_3.4.1.133604_official.apk";
 	
 
 	private UIRecive mRecive;
+	private static final int REQUEST_EXTERNAL_STORAGE = 1;
+	private static String[] PERMISSIONS_STORAGE = {
+			Manifest.permission.READ_EXTERNAL_STORAGE,
+			Manifest.permission.WRITE_EXTERNAL_STORAGE
+	};
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		verifyStoragePermissions(this);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
@@ -104,4 +113,14 @@ public class MainActivity extends Activity{
 
 	}
 
+	public static void verifyStoragePermissions(Activity activity) {
+		int permission = ActivityCompat.checkSelfPermission(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE);
+		if (permission != PackageManager.PERMISSION_GRANTED) {
+			ActivityCompat.requestPermissions(
+					activity,
+					PERMISSIONS_STORAGE,
+					REQUEST_EXTERNAL_STORAGE
+			);
+		}
+	}
 }

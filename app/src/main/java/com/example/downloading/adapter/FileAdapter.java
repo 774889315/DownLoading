@@ -28,12 +28,22 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
 	public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 		View view = LayoutInflater.from(parent.getContext())
 				.inflate(R.layout.item, parent, false);
-		ViewHolder holder = new ViewHolder(view);
+		final ViewHolder holder = new ViewHolder(view);
+		return holder;
 
+	}
+
+	@Override
+	public void onBindViewHolder(final ViewHolder holder, int position) {
+		final FileInfo fileInfo = mFilelist.get(position);
+		holder.textview.setText(fileInfo.getFileName());
+		holder.progressBar.setMax(100);
+		holder.progressBar.setProgress(fileInfo.getFinished());
 		holder.startButton.setOnClickListener(new View.OnClickListener() {
 
 			@Override
 			public void onClick(View v) {
+				mContext = v.getContext();
 				Intent intent = new Intent(mContext, DownloadService.class);
 				intent.setAction(DownloadService.ACTION_START);
 				intent.putExtra("fileInfo", fileInfo);
@@ -44,24 +54,13 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
 
 			@Override
 			public void onClick(View v) {
+				mContext = v.getContext();
 				Intent intent = new Intent(mContext, DownloadService.class);
 				intent.setAction(DownloadService.ACTION_STOP);
 				intent.putExtra("fileInfo", fileInfo);
 				mContext.startService(intent);
 			}
 		});
-		return holder;
-
-	}
-
-	@Override
-	public void onBindViewHolder(final ViewHolder holder, int position) {
-		final FileInfo fileInfo = mFilelist.get(position);
-		holder.textview.setText(fileInfo.getFileName());
-		holder.progressBar.setMax(100);
-
-
-		holder.progressBar.setProgress(fileInfo.getFinished());
 	}
 
 
@@ -87,7 +86,11 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
 		ProgressBar progressBar;
 
 		 ViewHolder(View itemView) {
-			super(itemView);
+			 super(itemView);
+			 textview = (TextView) itemView.findViewById(R.id.file_textview);
+			 startButton = (Button) itemView.findViewById(R.id.start_button);
+			 stopButton = (Button) itemView.findViewById(R.id.stop_button);
+			 progressBar = (ProgressBar) itemView.findViewById(R.id.progressBar);
 		}
 	}
 
