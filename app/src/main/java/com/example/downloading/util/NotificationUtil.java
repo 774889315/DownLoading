@@ -15,12 +15,16 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
+/**
+ * Created by Unreal Lover on 2017/10/2.
+ */
+
 public class NotificationUtil {
 
 	private Context mContext;
 	private NotificationManager mNotificationManager = null;
-	private Map<Integer, Notification> mNotifications = null; 
-	
+	private Map<Integer, Notification> mNotifications = null;
+
 	public NotificationUtil(Context context) {
 		this.mContext = context;
 
@@ -75,11 +79,13 @@ public class NotificationUtil {
 		mNotifications.remove(id);
 	}
 
-	public void updataNotification(int id, int progress) {
+	public void updataNotification(int id, long progress,double rate) {
 		Notification notification = mNotifications.get(id);
-		if (notification != null) {
 
-			notification.contentView.setProgressBar(R.id.progressBar2, 100, progress, false);
+		if (notification != null) {
+			CalculateUtil calculateUtil = new CalculateUtil(rate);
+			notification.contentView.setProgressBar(R.id.progressBar2, 100, (int) progress, false);
+			notification.contentView.setTextViewText(R.id.rate2,String.format("%.0f", calculateUtil.Rate()).toString()+""+calculateUtil.Unit()+"/s");
 			mNotificationManager.notify(id, notification);
 		}
 	}

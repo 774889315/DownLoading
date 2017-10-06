@@ -18,6 +18,9 @@ import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
 
+/**
+ * Created by Unreal Lover on 2017/10/2.
+ */
 
 public class DownloadService extends Service {
 
@@ -46,12 +49,14 @@ public class DownloadService extends Service {
 	public int onStartCommand(Intent intent, int flags, int startId) {
 
 		if (ACTION_START.equals(intent.getAction())) {
+			//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			FileInfo fileInfo = (FileInfo) intent.getSerializableExtra("fileInfo");
 			Log.i("test", "START" + fileInfo.toString());
 			InitThread initThread = new InitThread(fileInfo);
 			DownloadTask.sExecutorService.execute(initThread);			
 		} else if (ACTION_STOP.equals(intent.getAction())) {
 			FileInfo fileInfo = (FileInfo) intent.getSerializableExtra("fileInfo");
+			//?
 			DownloadTask task = mTasks.get(fileInfo.getId());
 			if (task != null) {
 				task.mIsPause = true;
@@ -65,12 +70,10 @@ public class DownloadService extends Service {
 			switch (msg.what) {
 			case MSG_INIT:
 				FileInfo fileInfo = (FileInfo) msg.obj;
-
+//完成的fileinfo
 				DownloadTask task = new DownloadTask(DownloadService.this, fileInfo, 3);
 				task.download();
-
 				mTasks.put(fileInfo.getId(), task);
-
 				Intent intent = new Intent(ACTION_START);
 				intent.putExtra("fileInfo", fileInfo);
 				sendBroadcast(intent);
@@ -98,11 +101,11 @@ public class DownloadService extends Service {
 				conn.setConnectTimeout(5 * 1000);
 				conn.setRequestMethod("GET");
 				int code = conn.getResponseCode();
-				int length = -1;
+				long length = -1;
 				if (code == HttpURLConnection.HTTP_OK) {
 					length = conn.getContentLength();
+					Log.i("lengthhhhhhh", String.valueOf(length));
 				}
-
 				if (length <= 0) {
 					return;
 				}
@@ -115,7 +118,6 @@ public class DownloadService extends Service {
 				File file = new File(dir, mFileInfo.getFileName());
 				raf = new RandomAccessFile(file, "rwd");
 				raf.setLength(length);
-
 				mFileInfo.setLength(length);
 
 				Message msg = Message.obtain();

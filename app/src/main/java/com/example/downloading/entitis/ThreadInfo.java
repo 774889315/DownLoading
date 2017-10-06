@@ -1,11 +1,14 @@
 package com.example.downloading.entitis;
 
+/**
+ * Created by Unreal Lover on 2017/10/2.
+ */
 
 public class ThreadInfo {
 	private int id;
 	private String url;
-	private int start;
-	private int end;
+	private long start;
+	private long end;
 	private int finished;
 
 	public ThreadInfo() {
@@ -13,7 +16,7 @@ public class ThreadInfo {
 	}
 
 
-	public ThreadInfo(int id, String url, int start, int end, int finished) {
+	public ThreadInfo(int id, String url, long start, long end, int finished) {
 		super();
 		this.id = id;
 		this.url = url;
@@ -21,7 +24,7 @@ public class ThreadInfo {
 		this.end = end;
 		this.finished = finished;
 	}
-
+	//存取线程id
 	public int getId() {
 		return id;
 	}
@@ -29,7 +32,7 @@ public class ThreadInfo {
 	public void setId(int id) {
 		this.id = id;
 	}
-
+	//存取下载地址
 	public String getUrl() {
 		return url;
 	}
@@ -37,23 +40,23 @@ public class ThreadInfo {
 	public void setUrl(String url) {
 		this.url = url;
 	}
-
-	public int getStart() {
+	//存取线程开始下载的位置
+	public long getStart() {
 		return start;
 	}
 
 	public void setStart(int start) {
 		this.start = start;
 	}
-
-	public int getEnd() {
+	//存取线程下载结束的位置
+	public long getEnd() {
 		return end;
 	}
 
 	public void setEnd(int end) {
 		this.end = end;
 	}
-
+	//存取线程下载进度
 	public int getFinished() {
 		return finished;
 	}

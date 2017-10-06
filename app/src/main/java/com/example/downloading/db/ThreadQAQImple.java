@@ -10,10 +10,14 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-public class ThreadDAOImple implements ThreadDAO {
+/**
+ * Created by Unreal Lover on 2017/10/2.
+ */
+
+public class ThreadQAQImple implements ThreadQAQ {
 	private DBHelper dbHelper = null;
 
-	public ThreadDAOImple(Context context) {
+	public ThreadQAQImple(Context context) {
 		super();
 		this.dbHelper = DBHelper.getInstance(context);
 	}

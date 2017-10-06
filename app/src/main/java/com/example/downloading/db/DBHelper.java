@@ -4,6 +4,10 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+/**
+ * Created by Unreal Lover on 2017/10/2.
+ */
+
 public class DBHelper extends SQLiteOpenHelper {
 	private static final String DB_NAME = "download.db";
 	private static final int VERSION = 1;

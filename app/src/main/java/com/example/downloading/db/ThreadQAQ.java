@@ -4,7 +4,11 @@ import java.util.List;
 
 import com.example.downloading.entitis.ThreadInfo;
 
-public interface ThreadDAO {
+/**
+ * Created by Unreal Lover on 2017/10/2.
+ */
+
+public interface ThreadQAQ {
 
  void insertThread(ThreadInfo info);
 
