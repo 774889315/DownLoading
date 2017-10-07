@@ -18,6 +18,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import static android.R.id.list;
+
 /**
  * Created by Unreal Lover on 2017/10/2.
  */
@@ -78,11 +80,9 @@ public class DownloadTask {
 		if (allFinished == true) {
 
 			QAQ.deleteThread(mFileInfo.getUrl());
-
 			Intent intent = new Intent(DownloadService.ACTION_FINISHED);
 			intent.putExtra("fileInfo", mFileInfo);
 			mComtext.sendBroadcast(intent);
-
 		}
 	}
 
@@ -134,7 +134,6 @@ public class DownloadTask {
 						if (System.currentTimeMillis() - time > 1000) {
 							times++;
 							time = System.currentTimeMillis();
-
 							intent.putExtra("finished", mFinished * 100 / (totalength));
 							intent.putExtra("id", mFileInfo.getId());
 							Log.i("test", (mFinished * 100) / totalength + "");

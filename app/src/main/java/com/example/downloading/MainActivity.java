@@ -17,8 +17,13 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 /**
@@ -26,12 +31,13 @@ import android.widget.Toast;
  */
 
 
-public class MainActivity extends Activity{
+public class MainActivity extends AppCompatActivity {
 	private RecyclerView recyclerView;
 	private List<FileInfo> mFileList;
 	private FileAdapter mAdapter;
 	private NotificationUtil mNotificationUtil = null;
-	private String urlone = "http://s1.music.126.net/download/android/CloudMusic_3.4.1.133604_official.apk";
+	public String url ;
+
 	
 	//先问系统要一手存储权限
 	private UIRecive mRecive;
@@ -46,31 +52,8 @@ public class MainActivity extends Activity{
 		verifyStoragePermissions(this);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
-		//初始化recyclerview
-		mFileList = new ArrayList<>();
-		recyclerView = (RecyclerView) findViewById(R.id.recyclerv_view);
-		LinearLayoutManager layoutManager = new LinearLayoutManager(this);
-		recyclerView.setLayoutManager(layoutManager);
-		mAdapter = new FileAdapter(mFileList);
-		recyclerView.setAdapter(mAdapter);
-
-		//demo1
-		FileInfo fileInfo1 = new FileInfo(0, urlone, getfileName(urlone), 0, 0);
-
-		//filelist
-		mFileList.add(fileInfo1);
-
-		//初始化notification
-		mNotificationUtil = new NotificationUtil(MainActivity.this);
-
-		mRecive = new UIRecive();
-		//初始化intentfilter
-		IntentFilter intentFilter = new IntentFilter();
-		intentFilter.addAction(DownloadService.ACTION_UPDATE);
-		intentFilter.addAction(DownloadService.ACTION_FINISHED);
-		intentFilter.addAction(DownloadService.ACTION_START);
-		registerReceiver(mRecive, intentFilter);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
 	}
 
 	@Override
@@ -83,7 +66,10 @@ public class MainActivity extends Activity{
 	private String getfileName(String url) {
 		return url.substring(url.lastIndexOf("/") + 1);
 	}
-	//定义广播
+
+
+
+    //定义广播
 	class UIRecive extends BroadcastReceiver {
 		@Override
 		public void onReceive(Context context, Intent intent) {
@@ -119,6 +105,63 @@ public class MainActivity extends Activity{
 					PERMISSIONS_STORAGE,
 					REQUEST_EXTERNAL_STORAGE
 			);
+		}
+	}
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.toolbar, menu);
+        return true;
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.achieve:
+                Toast.makeText(this, "You clicked Backup", Toast.LENGTH_SHORT).
+                        show();
+                break;
+            case R.id.add:
+				Intent intent = new Intent(MainActivity.this, AddActivity.class);
+				startActivityForResult(intent, 1);
+                break;
+            default:
+        }
+        return true;
+    }
+
+	@Override
+	public void onActivityResult(int requestCode, int resultCode, Intent data) {
+		switch (requestCode) {
+			case 1:
+				if (resultCode == RESULT_OK) {
+					url = data.getStringExtra("data_return");
+
+					//初始化recyclerview
+					mFileList = new ArrayList<>();
+					recyclerView = (RecyclerView) findViewById(R.id.recyclerv_view);
+					LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+					recyclerView.setLayoutManager(layoutManager);
+					mAdapter = new FileAdapter(mFileList);
+					recyclerView.setAdapter(mAdapter);
+					Log.i("QAQ", "onActivityResult: "+url);
+					//demo1
+					FileInfo fileInfo1 = new FileInfo(0, url, getfileName(url), 0, 0);
+
+					//filelist
+					mFileList.add(fileInfo1);
+
+					//初始化notification
+					mNotificationUtil = new NotificationUtil(MainActivity.this);
+
+					mRecive = new UIRecive();
+					//初始化intentfilter
+					IntentFilter intentFilter = new IntentFilter();
+					intentFilter.addAction(DownloadService.ACTION_UPDATE);
+					intentFilter.addAction(DownloadService.ACTION_FINISHED);
+					intentFilter.addAction(DownloadService.ACTION_START);
+					registerReceiver(mRecive, intentFilter);
+				}
+				break;
+			default:
 		}
 	}
 }

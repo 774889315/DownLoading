@@ -53,11 +53,9 @@ public class ThreadQAQImple implements ThreadQAQ {
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
 
 		db.execSQL("update thread_info set finished = ? where url = ? and thread_id = ?",
-				new Object[]{finished, url, thread_id});
+				 new Object[]{finished, url, thread_id});
 		db.close();
 	}
-
-
 	@Override
 	public List<ThreadInfo> queryThreads(String url) {
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -74,8 +72,6 @@ public class ThreadQAQImple implements ThreadQAQ {
 			thread.setFinished(cursor.getInt(cursor.getColumnIndex("finished")));
 			list.add(thread);
 		}
-		
-	
 		cursor.close();
 		db.close();
 		return list;
@@ -88,7 +84,6 @@ public class ThreadQAQImple implements ThreadQAQ {
 		Cursor cursor = db.query("thread_info", null, "url = ? and thread_id = ?", new String[] { url, thread_id + "" },
 				null, null, null);
 		boolean exists = cursor.moveToNext();
-		
 		db.close();
 		cursor.close();
 		return exists;
