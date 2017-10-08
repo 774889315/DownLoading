@@ -42,18 +42,21 @@ public class DownloadService extends Service {
 
 	@Override
 	public void onCreate() {
-		super.onCreate();
+
+		Log.d("Service", "onCreate: ");super.onCreate();
 	}
 
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
-
+		Log.d("Service", "onStartCommand: "+(intent==null));
+		if(intent==null){
+			return super.onStartCommand(intent, flags, startId);
+		}
 		if (ACTION_START.equals(intent.getAction())) {
-			//!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 			FileInfo fileInfo = (FileInfo) intent.getSerializableExtra("fileInfo");
 			Log.i("test", "START" + fileInfo.toString());
 			InitThread initThread = new InitThread(fileInfo);
-			DownloadTask.sExecutorService.execute(initThread);			
+			DownloadTask.sExecutorService.execute(initThread);
 		} else if (ACTION_STOP.equals(intent.getAction())) {
 			FileInfo fileInfo = (FileInfo) intent.getSerializableExtra("fileInfo");
 			//?

@@ -99,6 +99,7 @@ public class FileAdapter extends RecyclerView.Adapter<FileAdapter.ViewHolder>{
 		info.setRate(calculate.Rate());
 		info.setUtil2(calculate.Unit());
 		notifyDataSetChanged();
+
 	}
 //	设定总大小
 	public void settotal(int id,long length) {

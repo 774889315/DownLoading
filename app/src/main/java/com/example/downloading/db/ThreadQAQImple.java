@@ -77,7 +77,6 @@ public class ThreadQAQImple implements ThreadQAQ {
 		return list;
 	}
 
-
 	@Override
 	public boolean isExists(String url, int thread_id) {
 		SQLiteDatabase db = dbHelper.getReadableDatabase();
@@ -88,5 +87,4 @@ public class ThreadQAQImple implements ThreadQAQ {
 		cursor.close();
 		return exists;
 	}
-
 }

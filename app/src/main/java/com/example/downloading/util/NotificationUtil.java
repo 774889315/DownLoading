@@ -27,9 +27,7 @@ public class NotificationUtil {
 
 	public NotificationUtil(Context context) {
 		this.mContext = context;
-
 		mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-
 		mNotifications = new HashMap<Integer, Notification>();
 	}
 
@@ -41,12 +39,13 @@ public class NotificationUtil {
 			notification.when = System.currentTimeMillis();
 			notification.icon = R.drawable.ic_launcher;
 			notification.flags = Notification.FLAG_AUTO_CANCEL;
-			
+
 
 			Intent intent = new Intent(mContext, MainActivity.class);
 			PendingIntent pd = PendingIntent.getActivity(mContext, 0, intent, 0);
 			notification.contentIntent = pd;
-			
+
+//			OpenFileUtil.openFile(fileInfo.getFileName(),mContext);
 
 			RemoteViews remoteViews = new RemoteViews(mContext.getPackageName(), R.layout.notification);
 

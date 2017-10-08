@@ -30,7 +30,8 @@
 
         <service android:name=".service.DownloadService" />
 
-        <activity android:name=".AddActivity"></activity>
+        <activity android:name=".AddActivity" />
+        <activity android:name=".AchieveActivity"></activity>
     </application>
 
 </manifest>

@@ -12,10 +12,14 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import com.example.downloading.db.ThreadQAQ;
 import com.example.downloading.db.ThreadQAQImple;
+import com.example.downloading.db.fileHelper;
 import com.example.downloading.entitis.FileInfo;
 import com.example.downloading.entitis.ThreadInfo;
+
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.sqlite.SQLiteDatabase;
 import android.util.Log;
 
 import static android.R.id.list;
@@ -31,6 +35,7 @@ public class DownloadTask {
 	private long mFinished = 0;
 	private int mThreadCount = 1;
 	public boolean mIsPause = false;
+	public fileHelper dbHelper;
 	private List<DownloadThread> mThreadlist = null;
 	public static ExecutorService sExecutorService = Executors.newCachedThreadPool();
 
@@ -58,13 +63,20 @@ public class DownloadTask {
 				ThreadInfo threadInfo = new ThreadInfo(i, mFileInfo.getUrl(), start, end, 0);
 				list.add(threadInfo);
 			}
-		}
-		mThreadlist = new ArrayList<DownloadThread>();
-		for (ThreadInfo info : list) {
-			DownloadThread thread = new DownloadThread(info);
-			DownloadTask.sExecutorService.execute(thread);
-			mThreadlist.add(thread);
-			QAQ.insertThread(info);
+			mThreadlist = new ArrayList<DownloadThread>();
+			for (ThreadInfo info : list) {
+				DownloadThread thread = new DownloadThread(info);
+				DownloadTask.sExecutorService.execute(thread);
+				mThreadlist.add(thread);
+				QAQ.insertThread(info);
+			}
+		} else {
+			mThreadlist = new ArrayList<DownloadThread>();
+			for (ThreadInfo info : list) {
+				DownloadThread thread = new DownloadThread(info);
+				DownloadTask.sExecutorService.execute(thread);
+				mThreadlist.add(thread);
+			}
 		}
 	}
 
@@ -78,7 +90,7 @@ public class DownloadTask {
 		}
 
 		if (allFinished == true) {
-
+//
 			QAQ.deleteThread(mFileInfo.getUrl());
 			Intent intent = new Intent(DownloadService.ACTION_FINISHED);
 			intent.putExtra("fileInfo", mFileInfo);
@@ -103,9 +115,10 @@ public class DownloadTask {
 			RandomAccessFile raf = null;
 			InputStream is = null;
 			try {
+
 				URL url = new URL(mFileInfo.getUrl());
 				conn = (HttpURLConnection) url.openConnection();
-				conn.setConnectTimeout(5 * 1000);
+				conn.setConnectTimeout(1000);
 				conn.setRequestMethod("GET");
 //?
 				long start = threadInfo.getStart() + threadInfo.getFinished();
@@ -124,12 +137,19 @@ public class DownloadTask {
 					byte[] bt = new byte[1024];
 					double len = -1;
 					int times = 3;
-
+					String TAG = "TAG";
 					long time = System.currentTimeMillis();
+
 					while ((len = is.read(bt)) != -1) {
 						raf.write(bt, 0, (int) len);
 						mFinished += len;
+						Log.i(TAG, mFinished+"run: "+len);
 						threadInfo.setFinished((int) (threadInfo.getFinished() + len));
+						if (mIsPause) {
+							QAQ.updateThread(threadInfo.getUrl(), threadInfo.getId(), threadInfo.getFinished());
+							Log.i(TAG, "pause");
+							return;
+						}
 
 						if (System.currentTimeMillis() - time > 1000) {
 							times++;
@@ -147,16 +167,19 @@ public class DownloadTask {
 								times = 0;
 							}
 						}
-						if (mIsPause) {
-							QAQ.updateThread(threadInfo.getUrl(), threadInfo.getId(), threadInfo.getFinished());
-							return;
-						}
 					}
 				}
 
 				isFinished = true;
+				intent.putExtra("yon", 1);
+				mComtext.sendBroadcast(intent);
 				checkAllFinished();
-
+//		warming		dbHelper = new fileHelper(mComtext, "Book.db", null, 1);
+//
+//				SQLiteDatabase Book = dbHelper.getWritableDatabase();
+//				ContentValues values = new ContentValues();
+//				values.put("finish", 100);
+//				Book.update("Book", values, "url = ?", new String[] { mFileInfo.getUrl() });
 			} catch (Exception e) {
 				e.printStackTrace();
 			} finally {

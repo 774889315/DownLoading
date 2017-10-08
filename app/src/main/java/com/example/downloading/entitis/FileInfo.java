@@ -11,7 +11,7 @@ public class FileInfo implements Serializable {
 	private String url;
 	private String fileName;
 	private long length;
-	private long finished;
+	private int finished;
 	private String util;
 	private long Realong;
 	private double rate;
@@ -22,7 +22,7 @@ public class FileInfo implements Serializable {
 	}
 
 
-	public FileInfo(int id, String url, String fileName, long length, long finished) {
+	public FileInfo(int id, String url, String fileName, long length, int finished) {
 		super();
 		this.id = id;
 		this.url = url;
@@ -68,7 +68,7 @@ public class FileInfo implements Serializable {
 	}
 
 	public void setFinished(long finished) {
-		this.finished = finished;
+		this.finished = (int) finished;
 	}
 	//存取大小单位
 	public void setUtil(String util){
