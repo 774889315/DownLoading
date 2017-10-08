@@ -145,11 +145,7 @@ public class DownloadTask {
 						mFinished += len;
 						Log.i(TAG, mFinished+"run: "+len);
 						threadInfo.setFinished((int) (threadInfo.getFinished() + len));
-						if (mIsPause) {
-							QAQ.updateThread(threadInfo.getUrl(), threadInfo.getId(), threadInfo.getFinished());
-							Log.i(TAG, "pause");
-							return;
-						}
+
 
 						if (System.currentTimeMillis() - time > 1000) {
 							times++;
@@ -166,6 +162,12 @@ public class DownloadTask {
 								token = mFinished;
 								times = 0;
 							}
+						}
+						if (mIsPause) {
+							QAQ.updateThread(threadInfo.getUrl(), threadInfo.getId(), threadInfo.getFinished());
+							intent.putExtra("rate", 0);
+							Log.i(TAG, "pause");
+							return;
 						}
 					}
 				}

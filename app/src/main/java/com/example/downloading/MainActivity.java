@@ -12,6 +12,7 @@ import com.example.downloading.util.NotificationUtil;
 import android.Manifest;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
+import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +31,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 /**
@@ -49,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
 	int mid = 0;
 	public String name;
 
+
 	//先问系统要一手存储权限
 	private UIRecive mRecive;
 	private static final int REQUEST_EXTERNAL_STORAGE = 1;
@@ -65,18 +69,15 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-		//下载列表数据库
-		dbHelper = new fileHelper(this, "Book.db", null, 1);
 
-		dbHelper.getWritableDatabase();
-
-		SQLiteDatabase db = dbHelper.getWritableDatabase();
-
-
-
-
-
-
+//
+//		//下载列表数据库
+//		dbHelper = new fileHelper(this, "Book.db", null, 1);
+//
+//		dbHelper.getWritableDatabase();
+//
+//		SQLiteDatabase db = dbHelper.getWritableDatabase();
+//
 
 
 		//初始化recyclerview
@@ -88,36 +89,35 @@ public class MainActivity extends AppCompatActivity {
 		recyclerView.setAdapter(mAdapter);
 		Log.i("QAQ", "onActivityResult: "+url);
 
+//
+//// 查询 Book 表中所有的数据
+//		Cursor cursor = db.query("Book", null, null, null, null, null, null);
+//		if (cursor.moveToFirst()) {
+//			do {
+//// 遍历 Cursor 对象，取出数据并打印
+//					url = cursor.getString(cursor.getColumnIndex
+//						("url"));
+//					finish = cursor.getInt(cursor.getColumnIndex("finish"));
+//					mid = cursor.getInt(cursor.getColumnIndex("id"));
+//				//demo1
+//				if(finish!=100) {
+//					FileInfo fileInfo1 = new FileInfo(mid, url, getfileName(url), 0, finish);
+//					//filelist
+//					mFileList.add(fileInfo1);
+//				}
+//				else{
+//					FileInfo fileInfo2 = new FileInfo(mid, url, getfileName(url), 0, finish);
+//					aFileList.add(fileInfo2);
+//				}
+//
+//			} while (cursor.moveToNext());
+//		}
+//		cursor.close();
+//		Log.i("iDDDDDDD",url+"    "+finish+ "onCreate: "+mid);
 
 
+		registerClipEvents();
 
-
-
-
-// 查询 Book 表中所有的数据
-		Cursor cursor = db.query("Book", null, null, null, null, null, null);
-		if (cursor.moveToFirst()) {
-			do {
-// 遍历 Cursor 对象，取出数据并打印
-					url = cursor.getString(cursor.getColumnIndex
-						("url"));
-					finish = cursor.getInt(cursor.getColumnIndex("finish"));
-					mid = cursor.getInt(cursor.getColumnIndex("id"));
-				//demo1
-				if(finish!=100) {
-					FileInfo fileInfo1 = new FileInfo(mid, url, getfileName(url), 0, finish);
-					//filelist
-					mFileList.add(fileInfo1);
-				}
-				else{
-					FileInfo fileInfo2 = new FileInfo(mid, url, getfileName(url), 0, finish);
-					aFileList.add(fileInfo2);
-				}
-
-			} while (cursor.moveToNext());
-		}
-		cursor.close();
-		Log.i("iDDDDDDD",url+"    "+finish+ "onCreate: "+mid);
 	}
 
 
@@ -127,8 +127,10 @@ public class MainActivity extends AppCompatActivity {
 
 	@Override
 	protected void onDestroy() {
-//		unregisterReceiver(mRecive);
+		unregisterReceiver(mRecive);
+
 		super.onDestroy();
+
 	}
 
 	//获取文件名
@@ -211,13 +213,13 @@ public class MainActivity extends AppCompatActivity {
 				if (resultCode == RESULT_OK) {
 					url = data.getStringExtra("data_return");
 
-					SQLiteDatabase db = dbHelper.getWritableDatabase();
-					ContentValues values = new ContentValues();
-					// 开始组装第一条数据
-					values.put("finish", 0);
-					values.put("url", url);
-					db.insert("Book", null, values); // 插入第一条数据
-					values.clear();
+//					SQLiteDatabase db = dbHelper.getWritableDatabase();
+//					ContentValues values = new ContentValues();
+//					// 开始组装第一条数据
+//					values.put("finish", 0);
+//					values.put("url", url);
+//					db.insert("Book", null, values); // 插入第一条数据
+//					values.clear();
 
 					//初始化recyclerview
 					mFileList = new ArrayList<>();
@@ -252,5 +254,25 @@ public class MainActivity extends AppCompatActivity {
 	}
 	public void delete () {
 
+	}
+
+	private void registerClipEvents() {
+
+		final ClipboardManager manager = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+
+		manager.addPrimaryClipChangedListener(new ClipboardManager.OnPrimaryClipChangedListener() {
+			@Override
+			public void onPrimaryClipChanged() {
+
+				if (manager.hasPrimaryClip() && manager.getPrimaryClip().getItemCount() > 0) {
+
+					CharSequence addedText = manager.getPrimaryClip().getItemAt(0).getText();
+
+					if (addedText != null) {
+						url = (String) addedText;
+					}
+				}
+			}
+		});
 	}
 }

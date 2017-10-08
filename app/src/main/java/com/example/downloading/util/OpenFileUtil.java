@@ -95,10 +95,7 @@ public class OpenFileUtil {
 
     }
 
-    /**
-     * @param file
-     * @return 获得文件后缀名
-     */
+
     private static String getMIMEType(File file) {
         String type = "*/*";
         String fName = file.getName();
@@ -112,7 +109,7 @@ public class OpenFileUtil {
         if (end == "")
             return type;
         // 在 MIME 和文件类型的匹配表中找到对应的 MIME 类型。
-        for (int i = 0; i < MIME_MapTable.length; i++) { // MIME_MapTable??在这里你一定有疑问，这个MIME_MapTable是什么？
+        for (int i = 0; i < MIME_MapTable.length; i++) {
             if (end.equals(MIME_MapTable[i][0]))
                 type = MIME_MapTable[i][1];
         }
